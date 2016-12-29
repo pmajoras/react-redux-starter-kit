@@ -29,9 +29,26 @@ export const authenticate = (username, password) => {
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = { isAuthenticated: false }
+const AUTHENTICATION_STORAGE_STATE = 'DASHBOARD_AUTH_STATE'
+
+let initialState
+try {
+  let initialStateString = localStorage.getItem(AUTHENTICATION_STORAGE_STATE)
+  initialState = initialStateString ? JSON.parse(initialStateString) : { isAuthenticated: false }
+} catch (error) {
+  console.log('error', error)
+  initialState = { isAuthenticated: false }
+}
+
 export default function authenticationReducer (state = initialState, action) {
-  return action.type === AUTHENTICATION_CHANGE
-    ? action.payload
-    : state
+  let newState
+
+  if (action.type === AUTHENTICATION_CHANGE) {
+    newState = action.payload
+    localStorage.setItem(AUTHENTICATION_STORAGE_STATE, JSON.stringify(newState))
+  } else{
+    newState = state
+  }
+
+  return newState
 }

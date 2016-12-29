@@ -1,7 +1,9 @@
 import { injectReducer } from '../../store/reducers'
+import { canAccess } from '../handlers/accessHandler'
 
 export default (store) => ({
   path : 'counter',
+  onEnter: canAccess,
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point
